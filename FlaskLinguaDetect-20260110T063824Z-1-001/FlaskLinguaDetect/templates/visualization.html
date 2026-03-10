@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Visualization - Multilingual Language Identifier{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <h1 class="display-5 fw-bold mb-2">Visualization</h1>
+            <p class="text-muted mb-0">Compare Existing vs Proposed detection across input length and detected language.</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card app-section">
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.text.label(class="form-label fw-semibold") }}
+                            {{ form.text(class="form-control", rows="3") }}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if lengths_existing and lengths_proposed and lang_labels_existing and lang_labels_proposed %}
+    <div class="row mt-5 g-4">
+        <div class="col-md-6">
+            <div class="card chart-card app-section h-100">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3 text-center">Confidence vs Length (Existing vs Proposed)</h5>
+                    <canvas id="lengthChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card chart-card app-section h-100">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3 text-center">Confidence vs Language (Existing vs Proposed)</h5>
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 g-4">
+        <div class="col-md-6">
+            <div class="card chart-card app-section h-100">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3 text-center">Confidence vs Length (Existing Only)</h5>
+                    <canvas id="existingLengthChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card chart-card app-section h-100">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3 text-center">Confidence vs Length (Proposed Only)</h5>
+                    <canvas id="proposedLengthChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+{% if lengths_existing and lengths_proposed and lang_labels_existing and lang_labels_proposed %}
+    const lengths = {{ lengths_existing|tojson }};
+    const confExistingLength = {{ conf_existing|tojson }};
+    const confProposedLength = {{ conf_proposed|tojson }};
+
+    const langLabelsExisting = {{ lang_labels_existing|tojson }};
+    const confExistingLang = {{ lang_conf_existing|tojson }};
+
+    const langLabelsProposed = {{ lang_labels_proposed|tojson }};
+    const confProposedLang = {{ lang_conf_proposed|tojson }};
+
+    const commonLineOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 1 } },
+        plugins: { legend: { position: 'bottom' } }
+    };
+
+    // Chart 1: Length Existing vs Proposed
+    new Chart(document.getElementById('lengthChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: lengths,
+            datasets: [
+                { label: 'Existing', data: confExistingLength, borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.12)', tension: 0.3, fill: true },
+                { label: 'Proposed', data: confProposedLength, borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,0.12)', tension: 0.3, fill: true }
+            ]
+        },
+        options: commonLineOpts
+    });
+
+    // Chart 2: Language Existing vs Proposed
+    new Chart(document.getElementById('languageChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: langLabelsExisting.concat(langLabelsProposed),
+            datasets: [
+                {
+                    label: 'Existing',
+                    data: confExistingLang.concat(new Array(confProposedLang.length).fill(null)),
+                    backgroundColor: 'rgba(255,193,7,0.70)'
+                },
+                {
+                    label: 'Proposed',
+                    data: new Array(confExistingLang.length).fill(null).concat(confProposedLang),
+                    backgroundColor: 'rgba(25,135,84,0.70)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, max: 1 } },
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+
+    // Chart 3: Existing Only vs Length
+    new Chart(document.getElementById('existingLengthChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: lengths,
+            datasets: [
+                { label: 'Existing', data: confExistingLength, borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.12)', tension: 0.3, fill: true }
+            ]
+        },
+        options: commonLineOpts
+    });
+
+    // Chart 4: Proposed Only vs Length
+    new Chart(document.getElementById('proposedLengthChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: lengths,
+            datasets: [
+                { label: 'Proposed', data: confProposedLength, borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,0.12)', tension: 0.3, fill: true }
+            ]
+        },
+        options: commonLineOpts
+    });
+{% endif %}
+</script>
+{% endblock %}

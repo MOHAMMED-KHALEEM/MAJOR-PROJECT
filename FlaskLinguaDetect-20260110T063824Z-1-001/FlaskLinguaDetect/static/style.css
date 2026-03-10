@@ -1,0 +1,217 @@
+/* -----------------------------
+   App theme (professional UI)
+------------------------------ */
+:root{
+    --app-bg: #f6f8fb;
+    --app-surface: #ffffff;
+    --app-text: #0f172a;          /* slate-900 */
+    --app-muted: #64748b;         /* slate-500 */
+    --app-border: rgba(15, 23, 42, 0.10);
+    --app-shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+body{
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    font-weight: 500;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.text-muted{ color: var(--app-muted) !important; }
+
+/* Confidence score */
+.confidence-score {
+    text-align: center;
+    color: var(--app-text);
+}
+
+.confidence-score .h2 {
+    font-weight: 800; /* Extra bold */
+    margin-bottom: 0.25rem;
+    color: var(--app-text);
+}
+
+/* Enhanced card hover effects */
+.card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    border: 1px solid var(--app-border);
+    border-radius: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--app-shadow-soft);
+    border-color: rgba(15, 23, 42, 0.16);
+}
+
+/* Progress bars */
+.progress {
+    border-radius: 0.5rem;
+    background-color: rgba(15, 23, 42, 0.08);
+}
+
+.progress-bar {
+    border-radius: 0.5rem;
+    background-color: #007bff;
+}
+
+/* Table styling */
+.table th {
+    border-top: none;
+    font-weight: 800; /* Extra bold */
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--app-text);
+    background-color: rgba(15, 23, 42, 0.03);
+}
+
+.table td {
+    vertical-align: middle;
+    color: var(--app-text);
+    font-weight: 500;
+}
+
+/* Form enhancements */
+textarea.form-control {
+    resize: vertical;
+    min-height: 200px;
+    border-radius: 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    font-weight: 500;
+    border: 1px solid var(--app-border);
+}
+
+textarea.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+}
+
+/* Button enhancements */
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 800;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-lg:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Alert customizations */
+.alert {
+    border-radius: 0.75rem;
+    border: 1px solid var(--app-border);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    font-weight: 600;
+}
+
+/* Section helpers */
+.app-section{
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 1rem;
+}
+
+.app-hero{
+    background:
+        radial-gradient(900px 380px at 20% 10%, rgba(13,110,253,0.16) 0%, rgba(13,110,253,0) 60%),
+        radial-gradient(700px 340px at 85% 0%, rgba(25,135,84,0.14) 0%, rgba(25,135,84,0) 55%),
+        var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--app-shadow-soft);
+}
+
+.app-chip{
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .35rem .65rem;
+    border-radius: 999px;
+    border: 1px solid var(--app-border);
+    background: rgba(15, 23, 42, 0.02);
+    color: var(--app-muted);
+}
+
+/* Icon styling */
+.fa-globe {
+    background: linear-gradient(45deg, #0f172a, #0d6efd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .confidence-score .h2 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Loading animation for form submission */
+.btn[type="submit"]:disabled {
+    position: relative;
+    color: transparent;
+}
+
+.btn[type="submit"]:disabled::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+    from { transform: rotate(0turn); }
+    to { transform: rotate(1turn); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #000000;
+}
+
+/* Chart canvas container sizing */
+.chart-card canvas{
+    width: 100% !important;
+    height: 320px !important;
+}
